@@ -1,0 +1,22 @@
+services:
+  # Backend API - Private (internal network only)
+  backend:
+    build: ./backend
+    container_name: hostel-backend
+    restart: always
+    environment:
+      - PORT=${PORT:-5000}
+      - MONGO_URI=${MONGO_URI}
+      - JWT_SECRET=${JWT_SECRET}
+    # Port 5000 is NOT mapped to the host. Access is via the Nginx Reverse Proxy.
+
+  # Frontend & Reverse Proxy - Public Gateway
+  frontend:
+    build: ./frontend
+    container_name: hostel-frontend
+    restart: always
+    ports:
+      - "80:80" # Exposed port for public access
+    depends_on:
+      - backend
+

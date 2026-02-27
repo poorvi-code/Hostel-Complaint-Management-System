@@ -4,8 +4,20 @@
 
 body {
   margin: 0;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background: #f3f4f6;
-  color: #111827;
+  font-family: 'Outfit', sans-serif;
+  background: #f8fafc;
+  color: #0f172a;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@layer base {
+  input, select, textarea, button {
+    @apply transition-all duration-200 ease-in-out;
+  }
 }
 

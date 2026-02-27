@@ -1,4 +1,17 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { motion } from "framer-motion";
+import {
+  ShieldCheck,
+  Filter,
+  RefreshCcw,
+  AlertCircle,
+  Clock,
+  CheckCircle2,
+  FileText,
+  BarChart3,
+  Loader2,
+  Search
+} from "lucide-react";
 import ComplaintTable from "../components/ComplaintTable";
 import { getAllComplaints, updateComplaintStatus } from "../api";
 
@@ -54,59 +67,101 @@ const AdminDashboard = () => {
     [complaints]
   );
 
+  const stats = [
+    { label: "Total Issues", value: counts.total, icon: FileText, color: "text-blue-600", bg: "bg-blue-50", border: "border-blue-100" },
+    { label: "Pending", value: counts.pending, icon: Clock, color: "text-amber-600", bg: "bg-amber-50", border: "border-amber-100" },
+    { label: "In Progress", value: counts.inProgress, icon: BarChart3, color: "text-indigo-600", bg: "bg-indigo-50", border: "border-indigo-100" },
+    { label: "Resolved", value: counts.resolved, icon: CheckCircle2, color: "text-emerald-600", bg: "bg-emerald-50", border: "border-emerald-100" },
+  ];
+
   return (
-    <div className="max-w-6xl mx-auto px-4 py-6 space-y-6">
-      <section className="bg-white rounded-xl shadow-sm border border-gray-200 p-5 space-y-4">
-        <h2 className="text-xl font-semibold">Admin Dashboard</h2>
-
-        {error && <p className="bg-red-100 text-red-600 text-sm p-2 rounded">{error}</p>}
-
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="bg-gray-50 border border-gray-200 rounded p-3">Total: {counts.total}</div>
-          <div className="bg-yellow-50 border border-yellow-200 rounded p-3">Pending: {counts.pending}</div>
-          <div className="bg-blue-50 border border-blue-200 rounded p-3">
-            In Progress: {counts.inProgress}
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-2 text-blue-600 mb-1">
+            <ShieldCheck className="w-5 h-5" />
+            <span className="text-xs font-bold uppercase tracking-wider">Administrator</span>
           </div>
-          <div className="bg-green-50 border border-green-200 rounded p-3">Resolved: {counts.resolved}</div>
+          <h2 className="text-3xl font-bold text-gray-900 tracking-tight">Admin Console</h2>
         </div>
+        <button
+          onClick={loadComplaints}
+          disabled={loading}
+          className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl shadow-sm text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-all active:scale-[0.98] disabled:opacity-70"
+        >
+          <RefreshCcw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+          Refresh Data
+        </button>
+      </header>
 
-        <div className="grid gap-3 md:grid-cols-3">
-          <select
-            className="border border-gray-300 rounded px-3 py-2"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {stats.map((stat, idx) => (
+          <motion.div
+            key={stat.label}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: idx * 0.1 }}
+            className={`bg-white p-5 rounded-2xl border ${stat.border} shadow-sm flex items-center gap-4`}
           >
-            {categories.map((item) => (
-              <option key={item} value={item}>
-                Category: {item}
-              </option>
-            ))}
-          </select>
-          <select
-            className="border border-gray-300 rounded px-3 py-2"
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-          >
-            {statuses.map((item) => (
-              <option key={item} value={item}>
-                Status: {item}
-              </option>
-            ))}
-          </select>
-          <button
-            type="button"
-            onClick={loadComplaints}
-            className="bg-blue-600 hover:bg-blue-700 text-white rounded px-3 py-2 disabled:opacity-60"
-            disabled={loading}
-          >
-            {loading ? "Refreshing..." : "Refresh"}
-          </button>
-        </div>
+            <div className={`w-12 h-12 ${stat.bg} rounded-xl flex items-center justify-center shrink-0`}>
+              <stat.icon className={`w-6 h-6 ${stat.color}`} />
+            </div>
+            <div>
+              <p className="text-sm font-medium text-gray-500">{stat.label}</p>
+              <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
+            </div>
+          </motion.div>
+        ))}
       </section>
 
-      <section>
-        <h3 className="text-lg font-semibold mb-3">All Complaints</h3>
-        <ComplaintTable complaints={complaints} onStatusChange={handleStatusChange} showStudent />
+      <section className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+        <div className="p-6 border-b border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600">
+              <Filter className="w-5 h-5" />
+            </div>
+            <h3 className="text-xl font-bold text-gray-900">Manage Complaints</h3>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <select
+                className="pl-9 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all appearance-none cursor-pointer"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+              >
+                {categories.map((item) => (
+                  <option key={item} value={item}>Category: {item}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="relative">
+              <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <select
+                className="pl-9 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all appearance-none cursor-pointer"
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+              >
+                {statuses.map((item) => (
+                  <option key={item} value={item}>Status: {item}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </div>
+
+        {error && (
+          <div className="m-6 flex items-center gap-2 bg-red-50 text-red-600 text-sm p-4 rounded-xl border border-red-100">
+            <AlertCircle className="w-4 h-4" />
+            <p>{error}</p>
+          </div>
+        )}
+
+        <div className="p-0">
+          <ComplaintTable complaints={complaints} onStatusChange={handleStatusChange} showStudent />
+        </div>
       </section>
     </div>
   );
