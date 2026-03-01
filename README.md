@@ -139,12 +139,12 @@ Add role-based authentication
 📸 Screenshots
 
 
-Implement logging & monitoring<img width="1755" height="971" alt="Screenshot 2026-02-27 235551" src="https://github.com/user-attachments/assets/80ce68e3-6539-4bd9-ba51-ddee1e382e45" />
+<img width="500" height="200" alt="Screenshot 2026-02-27 235551" src="https://github.com/user-attachments/assets/80ce68e3-6539-4bd9-ba51-ddee1e382e45" />
 
-<img width="1920" height="1080" alt="Screenshot 2026-02-27 235633" src="https://github.com/user-attachments/assets/4bcbf56f-4b8d-41b5-ba9d-3428352894f3" />
+<img width="500" height="200" alt="Screenshot 2026-02-27 235633" src="https://github.com/user-attachments/assets/4bcbf56f-4b8d-41b5-ba9d-3428352894f3" />
 
 
-<img width="1703" height="880" alt="Screenshot 2026-02-27 235809" src="https://github.com/user-attachments/assets/22443e8d-0c1c-4bad-a2dc-6cb597f4835c" />
+<img width="500" height="200" alt="Screenshot 2026-02-27 235809" src="https://github.com/user-attachments/assets/22443e8d-0c1c-4bad-a2dc-6cb597f4835c" />
 
 
 
